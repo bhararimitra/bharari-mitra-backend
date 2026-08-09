@@ -1,0 +1,5 @@
+
+
+====
+
+ise.reject(e)),d.interceptors.response.use(e=>{if(e.config.url.includes("/web/api/v1/otps/")){const t=Object(i.c)(e);return e.headers.Authorization="|#|#".concat(t),e}let t=e;try{t.data=JSON.parse(Object(i.a)(t.data))}catch(d){t.data=t.data}const a=Object(i.c)(t);e.headers["access-control-allow-web"];let c=e.headers.authorization;if(!c&&e.config.url.includes("/web/api/v1/otps"))return e;const s=c.split("|#|#")[1];if(e.config.url.replace(/\/\d+$/,"")===r.E)return e;if(a==s){if(e.data&&(!e.config.headers["Content-Type"]||!e.config.headers["Content-Type"].includes("multipart/form-data")))try{e.data=JSON.parse(Object(i.a)(e.data))}catch(o){e.data=e.data}return e}return l.toastr.error(n.CRC_VALUE_NOT_MATCH),Promise.reject(e)},e=>{if(e.response){var t,a;if(null!==(t=e.config)&&void 0!==t&&null!==(a=t.url)&&void 0!==a&&a.includes("/web/api/v1/otps"))return Promise.reject(e);console.error(

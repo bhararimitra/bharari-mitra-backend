@@ -1,0 +1,100 @@
+{
+  "title": "BharariMitra crawler source inventory",
+  "version": "2.0",
+  "updated_at": "2026-08-08",
+  "goal": "Do not miss any official government recruitment notification. Maharashtra first, then Central.",
+  "files": {
+    "maharashtra": "maharashtra.json",
+    "central": "central.json"
+  },
+  "status_legend": {
+    "done": "Crawler live in scheduler and ingesting",
+    "planned": "Listed; not implemented yet",
+    "needs_url_fix": "Domain known; careers URL must be verified before coding",
+    "blocked": "Site unreachable / WAF / auth blocks crawl",
+    "paused": "Temporarily disabled"
+  },
+  "implementation_policy": [
+    "1. Finish Maharashtra priority=1 planned/needs_url_fix sites first.",
+    "2. Then Maharashtra priority=2.",
+    "3. Then Central priority=1.",
+    "4. District collectors / ZP last (template crawler).",
+    "5. When a crawler ships, set crawler_status to done and fill crawler_class."
+  ],
+  "done_now": {
+    "maharashtra": [
+      "mpsc",
+      "maharashtra-police",
+      "nhm-maharashtra",
+      "msrtc",
+      "mjp",
+      "pavitra-edustaff",
+      "dmer",
+      "mo-recruitment-phd",
+      "wcd-maharashtra",
+      "maharashtra-gov-portal",
+      "mahadiscom",
+      "mahagenco",
+      "mahatransco",
+      "midc",
+      "mahametro",
+      "mmrda",
+      "cidco",
+      "mahaforest",
+      "pwd-maharashtra",
+      "wrd-maharashtra",
+      "agriculture-maharashtra",
+      "animal-husbandry-maharashtra",
+      "tribal-maharashtra",
+      "sjsa-maharashtra",
+      "home-maharashtra",
+      "prison-maharashtra",
+      "education-maharashtra",
+      "higher-education-maharashtra",
+      "medical-education-dmer-site",
+      "mahaswayam",
+      "mahaonline-aaplesarkar",
+      "set-maharashtra",
+      "mumbai-university",
+      "pune-university",
+      "rtmnu",
+      "bamu",
+      "sgbau",
+      "shivaji-university",
+      "muhs",
+      "pcmc",
+      "pmc-pune",
+      "nmc-nagpur",
+      "best-undertaking",
+      "mswb",
+      "collector-template",
+      "zp-template"
+    ],
+    "central": [
+      "ssc",
+      "upsc",
+      "ibps"
+    ]
+  },
+  "next_maharashtra_queue": [
+    "bombay-high-court",
+    "revenue-maharashtra",
+    "arogya-maharashtra",
+    "mahapariksha",
+    "bmc",
+    "msedcl-mahasanchar"
+  ],
+  "next_central_queue": [
+    "rrb-national",
+    "rrc-cr",
+    "rrb-mumbai",
+    "upsc-ora",
+    "ssc-noticeboard",
+    "sbi-careers",
+    "rbi",
+    "indian-army",
+    "indian-navy",
+    "indian-air-force",
+    "india-post"
+  ]
+}

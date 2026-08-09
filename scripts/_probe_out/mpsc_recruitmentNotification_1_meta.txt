@@ -1,0 +1,44 @@
+url=https://mpsc.gov.in/recruitmentNotification/1
+tables=0 rows=0
+body=
+Screen Reader Access
+English
+ABOUT MPSC
+CANDIDATE INFORMATION
+ONLINE FACILITIES
+FAQ
+ADVISOR PORTAL
+DIVYANG CORNER
+GALLERY
+page you requested does not exist.
+
+links=
+English | # 
+Marathi | # 
+ABOUT MPSC | true
+Constitutional Provisions | /constitutional_provision/26
+Hon. Chairman's Message | /chairman_message/100
+Office Disclosures | /office_disclosures_/111
+The Commission | /the_commission/27
+Former Office Bearers | /former_office_bearers/28
+Annual Reports | /annual_reports/29
+Minutes of Meeting | /minutes_of_meeting/30
+Rules of Procedure | /rules_of_procedure/31
+Acts / Regulations | /acts_regulations/32
+E-News Letter | /e_news_letter/98
+CANDIDATE INFORMATION | true
+Advertisements / Notifications / Corrigendums | /adv_notification/8
+Results | true
+Provisional Selection List | /provisional_selection_list/105
+Results of Examinations/Recruitment | /result_of_exam/11
+Merit List | /results_merit_list/14
+Final Recommendation List | /results_final_recomm_list/15
+Recommendation from waiting List | /results_recomm_waiting_list/16
+Candidates Scoring Below Qualifying Marks | /candidates_scoring_below_qualifying_marks/97
+Previous Question Papers | /prev_que_papers/9
+Specimen Answer Booklet | /specimen_answer_booklet/112
+Debarred / Blacklisted Candidate | /debarred_blacklisted_candidates/47
+List of Not Eligible Candidates after scrutiny | /results_not_qualified/13
+Instructions | true
+General Instruction | /general_instruction/34
+Persons with Benchmark Disabilities(PwBD) | /persons_with_benchmark_disabilities/35

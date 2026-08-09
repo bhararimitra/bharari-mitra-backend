@@ -1,0 +1,60 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+*.whl
+
+# Virtual env
+.venv/
+venv/
+env/
+ENV/
+
+# Environment — NEVER commit .env
+.env
+.env.*
+!.env.example
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+coverage.xml
+*.coveragerc
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker volumes
+postgres_data/
+redis_data/
+
+# Alembic
+alembic/versions/*.pyc
+
+# Logs
+logs/
+!logs/.gitkeep
+*.log
+
+# Local crawler probe dumps
+scripts/_probe_out/
+_mh_batch2_*
+_verify.txt
+_job_titles.txt
+_api_latest.json
+_print_verify.py
+_mark_done*.py
+
+# OS
+.DS_Store
+Thumbs.db

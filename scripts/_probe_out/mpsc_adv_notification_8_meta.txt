@@ -1,0 +1,61 @@
+url=https://mpsc.gov.in/adv_notification/8
+tables=1 rows=11
+body=
+Screen Reader Access
+English
+ABOUT MPSC
+CANDIDATE INFORMATION
+ONLINE FACILITIES
+FAQ
+ADVISOR PORTAL
+DIVYANG CORNER
+GALLERY
+Advertisements / Notifications / Corrigendums
+CANDIDATE INFORMATION
+>
+ADVERTISEMENTS / NOTIFICATIONS / CORRIGENDUMS
+Sr. No.
+	
+Advt. No.
+	
+Subject
+	
+Date of Publication
+	File
+1	017/2026	Announcement regarding the examination pattern of Maharashtra Group-C Services Examination 2026 and the Acceptance of Applications from Candidates Appearing in the Final Year of their Degree for the Cadre of Assistant Fisheries Development Officer (Technical))	01-08-2026	
+2	017/2026	Advt. No. 017/2026 Maharashtra Group-C Services Combine Preliminary Examination 2026 - Assistant Motor Vehicle Inspector- Corrigendum regarding equivalent qualification	27-07-2026	
+3	017/2026	Advt. No. 017/2026 Maharashtra Group-C Services Combine Preliminary Examination 2026 - Corrigendum regarding posts & extension for application submission	22-07-2026	
+4	017/2026	Advt.No.017/2026 Maharashtra Group C Services Combine Preliminary Examination 2026- Corrigendum	16-07-2026	
+5	013/2026	Advt. No. 013/2026 Civil Judge Junior Division and Judicial Magistrate First Class Preliminary Examination 2024 - Corrigendum regarding extension for application submission and postponement of examination	07-07-2026	
+6	015/2026	Advt. No. 015/2026 Bailiff cum Clerk in the office of the Sheriff of Mumbai, Group-C Competitive Examination 2026 - Corrigendum Regarding Change in Posts and Extension for Application Submissio
+
+links=
+English | # 
+Marathi | # 
+ABOUT MPSC | true
+Constitutional Provisions | /constitutional_provision/26
+Hon. Chairman's Message | /chairman_message/100
+Office Disclosures | /office_disclosures_/111
+The Commission | /the_commission/27
+Former Office Bearers | /former_office_bearers/28
+Annual Reports | /annual_reports/29
+Minutes of Meeting | /minutes_of_meeting/30
+Rules of Procedure | /rules_of_procedure/31
+Acts / Regulations | /acts_regulations/32
+E-News Letter | /e_news_letter/98
+CANDIDATE INFORMATION | true
+Advertisements / Notifications / Corrigendums | /adv_notification/8
+Results | true
+Provisional Selection List | /provisional_selection_list/105
+Results of Examinations/Recruitment | /result_of_exam/11
+Merit List | /results_merit_list/14
+Final Recommendation List | /results_final_recomm_list/15
+Recommendation from waiting List | /results_recomm_waiting_list/16
+Candidates Scoring Below Qualifying Marks | /candidates_scoring_below_qualifying_marks/97
+Previous Question Papers | /prev_que_papers/9
+Specimen Answer Booklet | /specimen_answer_booklet/112
+Debarred / Blacklisted Candidate | /debarred_blacklisted_candidates/47
+List of Not Eligible Candidates after scrutiny | /results_not_qualified/13
+Instructions | true
+General Instruction | /general_instruction/34
+Persons with Benchmark Disabilities(PwBD) | /persons_with_benchmark_disabilities/35
