@@ -1,7 +1,8 @@
 """Job repository — all database access for jobs."""
 
 import uuid
-from sqlalchemy import select, func, or_, desc, asc
+from datetime import date
+from sqlalchemy import select, func, or_, desc, asc, delete, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload
 from app.modules.jobs.models import (
@@ -170,3 +171,43 @@ class JobRepository:
         await self._db.flush()
         await self._db.refresh(job)
         return job
+
+    async def count_expired(self, cutoff: date) -> int:
+        result = await self._db.execute(
+            select(func.count())
+            .select_from(Job)
+            .where(Job.last_date.is_not(None), Job.last_date < cutoff)
+        )
+        return int(result.scalar_one())
+
+    async def count_past_deadline(self, today: date) -> int:
+        result = await self._db.execute(
+            select(func.count())
+            .select_from(Job)
+            .where(
+                Job.last_date.is_not(None),
+                Job.last_date < today,
+                Job.status != JobStatus.CLOSED,
+            )
+        )
+        return int(result.scalar_one())
+
+    async def delete_expired(self, cutoff: date) -> int:
+        result = await self._db.execute(
+            delete(Job).where(Job.last_date.is_not(None), Job.last_date < cutoff)
+        )
+        await self._db.flush()
+        return int(result.rowcount or 0)
+
+    async def close_past_deadline(self, today: date) -> int:
+        result = await self._db.execute(
+            update(Job)
+            .where(
+                Job.last_date.is_not(None),
+                Job.last_date < today,
+                Job.status != JobStatus.CLOSED,
+            )
+            .values(status=JobStatus.CLOSED)
+        )
+        await self._db.flush()
+        return int(result.rowcount or 0)

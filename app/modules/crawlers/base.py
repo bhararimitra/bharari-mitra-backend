@@ -3,7 +3,7 @@
 import hashlib
 import re
 from abc import ABC, abstractmethod
-from datetime import datetime, timezone
+from datetime import date, datetime, timezone
 from typing import Any
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.logging import get_logger
@@ -109,9 +109,13 @@ class BaseCrawler(ABC):
 
     def normalize(self, raw: RawJobData) -> RawJobData:
         """Clean and normalise a RawJobData. Override to add custom logic."""
+        from app.modules.crawlers.dates import infer_last_date
+
         raw.title = re.sub(r"\s+", " ", raw.title).strip()
         if raw.summary:
             raw.summary = re.sub(r"\s+", " ", raw.summary).strip()
+        if not raw.last_date:
+            raw.last_date = infer_last_date(f"{raw.title} {raw.summary or ''}")
         return raw
 
     def validate(self, raw: RawJobData) -> None:
@@ -143,9 +147,18 @@ class BaseCrawler(ABC):
         if not date_str:
             return None
         from datetime import date
-        for fmt in ("%d/%m/%Y", "%Y-%m-%d", "%d-%m-%Y", "%d %b %Y", "%d %B %Y"):
+        value = date_str.strip().replace(".", "/")
+        for fmt in (
+            "%d/%m/%Y",
+            "%Y-%m-%d",
+            "%d-%m-%Y",
+            "%d %b %Y",
+            "%d %B %Y",
+            "%d-%b-%Y",
+            "%d-%B-%Y",
+        ):
             try:
-                return datetime.strptime(date_str.strip(), fmt).date()
+                return datetime.strptime(value, fmt).date()
             except ValueError:
                 continue
         self._logger.warning("unparseable_date", value=date_str)
@@ -237,6 +250,7 @@ class BaseCrawler(ABC):
         last_date = await self._parse_date(raw.last_date)
         published_at = await self._parse_date(raw.published_at)
         notification_type = classify_notification(raw.title, raw.summary)
+        expired = bool(last_date and last_date < date.today())
 
         if existing:
             # Update mutable fields only
@@ -245,12 +259,23 @@ class BaseCrawler(ABC):
             existing.apply_url = raw.apply_url
             existing.pdf_url = raw.pdf_url
             existing.vacancy_count = raw.vacancy_count
-            existing.last_date = last_date
+            if last_date is not None:
+                existing.last_date = last_date
             existing.notification_type = notification_type
+            if expired:
+                existing.status = JobStatus.CLOSED
             if not existing.recruitment_event_id:
                 await link_job_to_recruitment(self._db, existing)
             await self._job_repo.update(existing)
             return "updated"
+
+        if expired:
+            self._logger.info(
+                "crawler_skip_expired",
+                title=raw.title[:120],
+                last_date=str(last_date),
+            )
+            return "skipped"
 
         # Create new — include content hash so truncated Marathi slugs stay unique
         # even before prior inserts are visible to get_by_slug in the same session.

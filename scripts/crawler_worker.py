@@ -7,6 +7,7 @@ Usage:
     python scripts/crawler_worker.py
     python scripts/crawler_worker.py --once          # run batch once and exit
     python scripts/crawler_worker.py --no-startup    # skip immediate first run
+    python scripts/crawler_worker.py --cleanup-once  # weekly job cleanup once and exit
 
 Windows (background):
     .\\scripts\\start_crawler_worker.ps1
@@ -110,7 +111,24 @@ def main() -> None:
         action="store_true",
         help="Do not queue an immediate crawl on worker start",
     )
+    parser.add_argument(
+        "--cleanup-once",
+        action="store_true",
+        help="Run expired-job cleanup once and exit",
+    )
     args = parser.parse_args()
+
+    if args.cleanup_once:
+        from app.modules.jobs.cleanup import run_expired_job_cleanup
+
+        async def _cleanup_once() -> None:
+            configure_logging()
+            await _check_db()
+            await run_expired_job_cleanup()
+            await get_engine().dispose()
+
+        asyncio.run(_cleanup_once())
+        return
 
     if args.once:
         asyncio.run(run_once())

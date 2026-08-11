@@ -48,6 +48,7 @@ class JobListItem(BaseModel):
     age_max: int | None
     published_at: date | None
     last_date: date | None
+    summary: str | None = None
     notification_url: str | None = None
     apply_url: str | None = None
     pdf_url: str | None = None

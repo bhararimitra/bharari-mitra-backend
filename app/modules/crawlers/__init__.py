@@ -4,11 +4,15 @@ Available crawlers:
     MpscCrawler    — mpsc.gov.in
     PoliceCrawler  — mahapolice.gov.in
     NhmCrawler     — nhm.maharashtra.gov.in
+    ArogyaCrawler  — phd.maharashtra.gov.in (Public Health / Arogya)
     MsrtcCrawler   — msrtc.maharashtra.gov.in
     MjpCrawler     — mjp.maharashtra.gov.in
     SscCrawler     — ssc.gov.in (central)
     UpscCrawler    — upsc.gov.in (central)
     IbpsCrawler    — ibps.in (central / banking)
+    RrbNationalCrawler, RrcCrCrawler, RailwayBoardCrawler
+    IndianArmyCrawler, IndianNavyCrawler, IndianAirForceCrawler
+    IndiaPostCrawler, SbiCrawler, RbiCrawler
 
 To add a new crawler:
     1. Create a new file, e.g. app/modules/crawlers/zp.py
@@ -26,11 +30,23 @@ from app.modules.crawlers.mjp import MjpCrawler
 from app.modules.crawlers.pavitra import PavitraCrawler
 from app.modules.crawlers.dmer import DmerCrawler
 from app.modules.crawlers.mo_recruitment import MoRecruitmentCrawler
+from app.modules.crawlers.arogya import ArogyaCrawler
 from app.modules.crawlers.wcd import WcdCrawler
 from app.modules.crawlers.maharashtra_gov import MaharashtraGovCrawler
 from app.modules.crawlers.ssc import SscCrawler
 from app.modules.crawlers.upsc import UpscCrawler
 from app.modules.crawlers.ibps import IbpsCrawler
+from app.modules.crawlers.central_batch1 import (
+    IndiaPostCrawler,
+    IndianAirForceCrawler,
+    IndianArmyCrawler,
+    IndianNavyCrawler,
+    RailwayBoardCrawler,
+    RbiCrawler,
+    RrbNationalCrawler,
+    RrcCrCrawler,
+    SbiCrawler,
+)
 
 __all__ = [
     "BaseCrawler",
@@ -43,9 +59,19 @@ __all__ = [
     "PavitraCrawler",
     "DmerCrawler",
     "MoRecruitmentCrawler",
+    "ArogyaCrawler",
     "WcdCrawler",
     "MaharashtraGovCrawler",
     "SscCrawler",
     "UpscCrawler",
     "IbpsCrawler",
+    "RrbNationalCrawler",
+    "RrcCrCrawler",
+    "RailwayBoardCrawler",
+    "IndianArmyCrawler",
+    "IndianNavyCrawler",
+    "IndianAirForceCrawler",
+    "IndiaPostCrawler",
+    "SbiCrawler",
+    "RbiCrawler",
 ]

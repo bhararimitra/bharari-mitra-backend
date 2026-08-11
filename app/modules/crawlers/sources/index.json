@@ -1,7 +1,7 @@
 {
   "title": "BharariMitra crawler source inventory",
   "version": "2.0",
-  "updated_at": "2026-08-08",
+  "updated_at": "2026-08-11",
   "goal": "Do not miss any official government recruitment notification. Maharashtra first, then Central.",
   "files": {
     "maharashtra": "maharashtra.json",
@@ -31,6 +31,7 @@
       "pavitra-edustaff",
       "dmer",
       "mo-recruitment-phd",
+      "arogya-maharashtra",
       "wcd-maharashtra",
       "maharashtra-gov-portal",
       "mahadiscom",
@@ -73,28 +74,32 @@
     "central": [
       "ssc",
       "upsc",
-      "ibps"
+      "ibps",
+      "rrb",
+      "rrb-mumbai",
+      "rrc-central-railway",
+      "railway-board",
+      "indian-army",
+      "indian-navy",
+      "indian-air-force",
+      "india-post",
+      "sbi",
+      "rbi"
     ]
   },
   "next_maharashtra_queue": [
     "bombay-high-court",
     "revenue-maharashtra",
-    "arogya-maharashtra",
     "mahapariksha",
     "bmc",
     "msedcl-mahasanchar"
   ],
   "next_central_queue": [
-    "rrb-national",
-    "rrc-cr",
-    "rrb-mumbai",
     "upsc-ora",
     "ssc-noticeboard",
-    "sbi-careers",
-    "rbi",
-    "indian-army",
-    "indian-navy",
-    "indian-air-force",
-    "india-post"
+    "indian-coast-guard",
+    "esic",
+    "epfo",
+    "fci"
   ]
 }

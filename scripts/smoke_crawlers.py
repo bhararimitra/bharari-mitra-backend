@@ -42,6 +42,17 @@ async def main() -> None:
     from app.modules.crawlers.upsc import UpscCrawler
     from app.modules.crawlers.ibps import IbpsCrawler
     from app.modules.crawlers.mpsc import MpscCrawler
+    from app.modules.crawlers.central_batch1 import (
+        IndiaPostCrawler,
+        IndianAirForceCrawler,
+        IndianArmyCrawler,
+        IndianNavyCrawler,
+        RailwayBoardCrawler,
+        RbiCrawler,
+        RrbNationalCrawler,
+        RrcCrCrawler,
+        SbiCrawler,
+    )
 
     # HTML/API crawlers first (reliable), then Playwright MPSC
     await run_one("NHM", NhmCrawler)
@@ -51,6 +62,15 @@ async def main() -> None:
     await run_one("SSC", SscCrawler)
     await run_one("UPSC", UpscCrawler)
     await run_one("IBPS", IbpsCrawler)
+    await run_one("RRB", RrbNationalCrawler)
+    await run_one("RRC-CR", RrcCrCrawler)
+    await run_one("RailwayBoard", RailwayBoardCrawler)
+    await run_one("Army", IndianArmyCrawler)
+    await run_one("Navy", IndianNavyCrawler)
+    await run_one("IAF", IndianAirForceCrawler)
+    await run_one("IndiaPost", IndiaPostCrawler)
+    await run_one("SBI", SbiCrawler)
+    await run_one("RBI", RbiCrawler)
     await run_one("MPSC", MpscCrawler)
 
 

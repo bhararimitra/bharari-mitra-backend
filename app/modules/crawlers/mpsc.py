@@ -1,10 +1,39 @@
 """MPSC Crawler — mpsc.gov.in advertisements (React SPA via Playwright)."""
 
+from __future__ import annotations
+
+import asyncio
 import re
+from typing import Any
 from urllib.parse import quote
+
 from app.modules.crawlers.base import BaseCrawler, RawJobData
+from app.modules.crawlers.dates import dates_in_text
 
 _MAX_JOBS = 50
+_DATE_KEY_HINTS = (
+    "lastdate",
+    "last_date",
+    "closingdate",
+    "closing_date",
+    "enddate",
+    "end_date",
+    "todate",
+    "to_date",
+    "applicationend",
+    "applyend",
+    "applyto",
+    "onlineend",
+)
+_ADVT_KEY_HINTS = (
+    "advtno",
+    "advt_no",
+    "advertisementno",
+    "advertisement_no",
+    "advertisementnumber",
+    "adno",
+    "advt",
+)
 
 
 class MpscCrawler(BaseCrawler):
@@ -21,6 +50,10 @@ class MpscCrawler(BaseCrawler):
     base_url = "https://mpsc.gov.in"
     apply_url = "https://mpsconline.gov.in"
 
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        super().__init__(*args, **kwargs)
+        self._json_payloads: list[Any] = []
+
     async def fetch(self) -> str:
         try:
             from playwright.async_api import async_playwright
@@ -30,6 +63,7 @@ class MpscCrawler(BaseCrawler):
                 "Install with: pip install playwright && playwright install chromium"
             ) from e
 
+        self._json_payloads = []
         async with async_playwright() as p:
             browser = await p.chromium.launch(headless=True)
             try:
@@ -39,9 +73,22 @@ class MpscCrawler(BaseCrawler):
                         "+https://bhararimitra.in/bot)"
                     )
                 )
+
+                async def on_response(response: Any) -> None:
+                    ctype = (response.headers.get("content-type") or "").lower()
+                    url = (response.url or "").lower()
+                    if "json" not in ctype and "api" not in url:
+                        return
+                    try:
+                        payload = await response.json()
+                    except Exception:
+                        return
+                    if payload is not None:
+                        self._json_payloads.append(payload)
+
+                page.on("response", lambda response: asyncio.create_task(on_response(response)))
                 await page.goto(self.source_url, wait_until="networkidle", timeout=90000)
                 await page.wait_for_selector("table.dataTable tbody tr, table tbody tr", timeout=30000)
-                # Ensure rows are painted
                 await page.wait_for_timeout(1500)
                 return await page.content()
             finally:
@@ -53,6 +100,9 @@ class MpscCrawler(BaseCrawler):
         soup = BeautifulSoup(raw, "lxml")
         jobs: list[RawJobData] = []
         seen: set[str] = set()
+        last_by_advt = self._last_dates_from_payloads()
+        if not hasattr(self, "_json_payloads"):
+            self._json_payloads = []
 
         table = soup.find("table")
         if not table:
@@ -75,7 +125,11 @@ class MpscCrawler(BaseCrawler):
                 if len(cols) > 3:
                     published_at = self._extract_date(cols[3].get_text(" ", strip=True))
 
-                # PDF downloads are JS-handled (href="#"); keep a stable canonical URL.
+                last_date = last_by_advt.get(self._advt_key(advt_no))
+                if not last_date:
+                    row_text = " ".join(c.get_text(" ", strip=True) for c in cols)
+                    last_date = self._last_date_from_row(row_text, published_at)
+
                 notification_url = (
                     f"{self.source_url}?advt={quote(advt_no or 'unknown')}"
                     f"&sr={quote(sr or str(len(jobs) + 1))}"
@@ -92,6 +146,7 @@ class MpscCrawler(BaseCrawler):
                         notification_url=notification_url,
                         apply_url=self.apply_url,
                         published_at=published_at,
+                        last_date=last_date,
                         organization_slug="mpsc",
                         organization_name="MPSC",
                         organization_url=self.base_url,
@@ -107,7 +162,12 @@ class MpscCrawler(BaseCrawler):
                 self._logger.warning("mpsc_row_parse_error", error=str(e))
                 continue
 
-        self._logger.info("mpsc_parsed", total_found=len(jobs))
+        self._logger.info(
+            "mpsc_parsed",
+            total_found=len(jobs),
+            json_payloads=len(self._json_payloads),
+            last_dates=sum(1 for j in jobs if j.last_date),
+        )
         return jobs
 
     def normalize(self, raw: RawJobData) -> RawJobData:
@@ -123,6 +183,48 @@ class MpscCrawler(BaseCrawler):
         return raw
 
     def _extract_date(self, text: str) -> str | None:
-        # Site uses dd-mm-yyyy
-        m = re.search(r"\d{2}[/\-]\d{2}[/\-]\d{4}", text or "")
+        m = re.search(r"\d{1,2}[/\-]\d{1,2}[/\-]\d{4}", text or "")
         return m.group().replace("-", "/") if m else None
+
+    def _advt_key(self, advt_no: str) -> str:
+        return re.sub(r"\s+", "", advt_no or "").lower()
+
+    def _last_date_from_row(self, row_text: str, published_at: str | None) -> str | None:
+        found = dates_in_text(row_text)
+        if not found:
+            return None
+        extra = [d for d in found if d != published_at]
+        return extra[-1] if extra else None
+
+    def _last_dates_from_payloads(self) -> dict[str, str]:
+        found: dict[str, str] = {}
+        payloads = getattr(self, "_json_payloads", []) or []
+
+        def walk(obj: Any) -> None:
+            if isinstance(obj, list):
+                for item in obj:
+                    walk(item)
+                return
+            if not isinstance(obj, dict):
+                return
+            keys = {re.sub(r"[^a-z0-9]", "", str(k).lower()): v for k, v in obj.items()}
+            advt = None
+            for hint in _ADVT_KEY_HINTS:
+                if hint in keys and keys[hint]:
+                    advt = str(keys[hint])
+                    break
+            date_val = None
+            for key, val in keys.items():
+                if val and any(h in key for h in _DATE_KEY_HINTS):
+                    date_val = str(val)
+                    break
+            if advt and date_val:
+                parsed = self._extract_date(date_val)
+                if parsed:
+                    found[self._advt_key(advt)] = parsed
+            for val in obj.values():
+                walk(val)
+
+        for payload in payloads:
+            walk(payload)
+        return found

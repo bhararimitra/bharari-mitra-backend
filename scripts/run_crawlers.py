@@ -34,6 +34,7 @@ CRAWLERS = {
     "pavitra": "app.modules.crawlers.pavitra.PavitraCrawler",
     "dmer": "app.modules.crawlers.dmer.DmerCrawler",
     "mo": "app.modules.crawlers.mo_recruitment.MoRecruitmentCrawler",
+    "arogya": "app.modules.crawlers.arogya.ArogyaCrawler",
     "wcd": "app.modules.crawlers.wcd.WcdCrawler",
     "mahagov": "app.modules.crawlers.maharashtra_gov.MaharashtraGovCrawler",
     "msedcl": "app.modules.crawlers.mh_batch2.MsedclCrawler",
@@ -74,6 +75,15 @@ CRAWLERS = {
     "ssc": "app.modules.crawlers.ssc.SscCrawler",
     "upsc": "app.modules.crawlers.upsc.UpscCrawler",
     "ibps": "app.modules.crawlers.ibps.IbpsCrawler",
+    "rrb": "app.modules.crawlers.central_batch1.RrbNationalCrawler",
+    "rrc": "app.modules.crawlers.central_batch1.RrcCrCrawler",
+    "railwayboard": "app.modules.crawlers.central_batch1.RailwayBoardCrawler",
+    "army": "app.modules.crawlers.central_batch1.IndianArmyCrawler",
+    "navy": "app.modules.crawlers.central_batch1.IndianNavyCrawler",
+    "iaf": "app.modules.crawlers.central_batch1.IndianAirForceCrawler",
+    "indiapost": "app.modules.crawlers.central_batch1.IndiaPostCrawler",
+    "sbi": "app.modules.crawlers.central_batch1.SbiCrawler",
+    "rbi": "app.modules.crawlers.central_batch1.RbiCrawler",
 }
 
 

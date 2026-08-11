@@ -96,6 +96,32 @@ def test_normalize_strips_whitespace():
     assert normalized.title == "MPSC Exam 2025"
 
 
+def test_normalize_infers_last_date_from_title_range():
+    raw = RawJobData(
+        title="Staff Nurse walk-in 27/12/2024 09/01/2025",
+        notification_url="https://phd.maharashtra.gov.in/a.pdf",
+        organization_slug="arogya",
+        organization_name="Public Health",
+        organization_url="https://phd.maharashtra.gov.in",
+    )
+    instance = object.__new__(_ConcreteTestCrawler)
+    normalized = instance.normalize(raw)
+    assert normalized.last_date == "09/01/2025"
+
+
+def test_normalize_does_not_invent_last_date_from_single_date():
+    raw = RawJobData(
+        title="017/2026 Maharashtra Group C Services 25/06/2026",
+        notification_url="https://mpsc.gov.in/n/1",
+        organization_slug="mpsc",
+        organization_name="MPSC",
+        organization_url="https://mpsc.gov.in",
+    )
+    instance = object.__new__(_ConcreteTestCrawler)
+    normalized = instance.normalize(raw)
+    assert normalized.last_date is None
+
+
 def test_build_slug_is_url_safe():
     instance = object.__new__(_ConcreteTestCrawler)
     slug = instance.build_slug("MPSC State Services Exam 2025", "mpsc")

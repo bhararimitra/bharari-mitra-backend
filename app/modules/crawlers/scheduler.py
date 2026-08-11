@@ -10,6 +10,7 @@ from __future__ import annotations
 from datetime import datetime, timedelta, timezone
 
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 from apscheduler.triggers.interval import IntervalTrigger
 from app.core.config import get_settings
 from app.core.logging import get_logger
@@ -26,6 +27,7 @@ CRAWLER_PATHS: list[str] = [
     "app.modules.crawlers.pavitra.PavitraCrawler",
     "app.modules.crawlers.dmer.DmerCrawler",
     "app.modules.crawlers.mo_recruitment.MoRecruitmentCrawler",
+    "app.modules.crawlers.arogya.ArogyaCrawler",
     "app.modules.crawlers.wcd.WcdCrawler",
     "app.modules.crawlers.maharashtra_gov.MaharashtraGovCrawler",
     # Maharashtra — batch 2 departments / PSUs
@@ -70,6 +72,15 @@ CRAWLER_PATHS: list[str] = [
     "app.modules.crawlers.ssc.SscCrawler",
     "app.modules.crawlers.upsc.UpscCrawler",
     "app.modules.crawlers.ibps.IbpsCrawler",
+    "app.modules.crawlers.central_batch1.RrbNationalCrawler",
+    "app.modules.crawlers.central_batch1.RrcCrCrawler",
+    "app.modules.crawlers.central_batch1.RailwayBoardCrawler",
+    "app.modules.crawlers.central_batch1.IndianArmyCrawler",
+    "app.modules.crawlers.central_batch1.IndianNavyCrawler",
+    "app.modules.crawlers.central_batch1.IndianAirForceCrawler",
+    "app.modules.crawlers.central_batch1.IndiaPostCrawler",
+    "app.modules.crawlers.central_batch1.SbiCrawler",
+    "app.modules.crawlers.central_batch1.RbiCrawler",
 ]
 
 
@@ -110,6 +121,12 @@ async def run_all_crawlers() -> None:
 _run_crawler = run_crawler
 
 
+async def _run_expired_job_cleanup() -> None:
+    from app.modules.jobs.cleanup import run_expired_job_cleanup
+
+    await run_expired_job_cleanup()
+
+
 def _register_jobs(scheduler: AsyncIOScheduler, *, run_immediately: bool) -> None:
     settings = get_settings()
     interval_hours = settings.CRAWLER_INTERVAL_HOURS
@@ -129,6 +146,24 @@ def _register_jobs(scheduler: AsyncIOScheduler, *, run_immediately: bool) -> Non
         job="crawl_all",
         interval_hours=interval_hours,
     )
+
+    if settings.JOB_CLEANUP_ENABLED:
+        scheduler.add_job(
+            _run_expired_job_cleanup,
+            trigger=CronTrigger(day_of_week="sun", hour=2, minute=0, timezone="UTC"),
+            id="cleanup_expired_jobs",
+            name="Delete expired jobs (weekly)",
+            replace_existing=True,
+            max_instances=1,
+            coalesce=True,
+            misfire_grace_time=86400,
+        )
+        logger.info(
+            "scheduler_job_registered",
+            job="cleanup_expired_jobs",
+            when="Sunday 02:00 UTC",
+            retention_days=settings.JOB_CLEANUP_RETENTION_DAYS,
+        )
 
     if run_immediately:
         scheduler.add_job(

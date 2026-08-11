@@ -136,11 +136,15 @@ class HtmlListingCrawler(BaseCrawler):
 
     def normalize(self, raw: RawJobData) -> RawJobData:
         raw = super().normalize(raw)
-        m = re.search(r"(\d{2})[-./](\d{2})[-./](20\d{2})", raw.title)
-        if m and not raw.published_at:
-            raw.published_at = f"{m.group(1)}/{m.group(2)}/{m.group(3)}"
+        dates = re.findall(r"(\d{1,2})[-./](\d{1,2})[-./](20\d{2})", raw.title)
+        if dates and not raw.published_at:
+            d, m, y = dates[0]
+            raw.published_at = f"{d.zfill(2)}/{m.zfill(2)}/{y}"
         elif not raw.published_at:
             y = re.search(r"20\d{2}", raw.title)
             if y:
                 raw.published_at = f"01/01/{y.group()}"
+        if len(dates) >= 2 and not raw.last_date:
+            d, m, y = dates[-1]
+            raw.last_date = f"{d.zfill(2)}/{m.zfill(2)}/{y}"
         return raw

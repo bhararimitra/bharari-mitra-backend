@@ -86,6 +86,23 @@ class TestMpscCrawler:
         result = crawler.normalize(raw)
         assert result.published_at == "01/01/2025"
 
+    @pytest.mark.asyncio
+    async def test_parse_uses_json_last_date(self):
+        crawler = _make(MpscCrawler)
+        crawler._json_payloads = [
+            {
+                "data": [
+                    {
+                        "advtNo": "017/2026",
+                        "lastDate": "20-08-2026",
+                        "subject": "Group C",
+                    }
+                ]
+            }
+        ]
+        jobs = await crawler.parse(self.SAMPLE_HTML)
+        assert jobs[0].last_date == "20/08/2026"
+
 
 class TestPoliceCrawler:
     SAMPLE_HTML = """

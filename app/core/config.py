@@ -40,6 +40,9 @@ class Settings(BaseSettings):
     CRAWLER_RUN_ON_STARTUP: bool = True
     # Keep False when using scripts/crawler_worker.py (avoid double crawls)
     ENABLE_API_SCHEDULER: bool = False
+    # Weekly expired-job cleanup (Sunday 02:00 UTC via crawler worker)
+    JOB_CLEANUP_ENABLED: bool = True
+    JOB_CLEANUP_RETENTION_DAYS: int = 7
 
     # Security
     SECRET_KEY: str = "change-this-in-production"
