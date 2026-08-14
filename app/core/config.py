@@ -44,6 +44,9 @@ class Settings(BaseSettings):
     JOB_CLEANUP_ENABLED: bool = True
     JOB_CLEANUP_RETENTION_DAYS: int = 7
 
+    # IndexNow — public key file must be at https://bhararimitra.in/{key}.txt
+    INDEXNOW_KEY: str = ""
+
     # Security
     SECRET_KEY: str = "change-this-in-production"
     API_RATE_LIMIT: str = "100/minute"

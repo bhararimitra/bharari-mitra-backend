@@ -16,7 +16,7 @@ from app.modules.organizations.repository import OrganizationRepository
 from app.modules.departments.repository import DepartmentRepository
 from app.modules.districts.repository import DistrictRepository
 from app.modules.qualifications.repository import QualificationRepository
-from app.modules.recruitments.linking import link_job_to_recruitment
+from app.modules.jobs.indexnow import ping_job_url
 from app.shared.exceptions import ValidationError
 from slugify import slugify
 
@@ -308,4 +308,5 @@ class BaseCrawler(ABC):
         await self._job_repo.create(job)
         await link_job_to_recruitment(self._db, job)
         await self._job_repo.update(job)
+        await ping_job_url(job.slug)
         return "added"

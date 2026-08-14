@@ -97,3 +97,18 @@ def test_plain_recruitment_defaults_to_job():
 def test_english_hall_ticket_and_answer_key():
     assert classify_notification("Download Hall Ticket") == NotificationType.HALL_TICKET
     assert classify_notification("Answer Key Released") == NotificationType.ANSWER_KEY
+
+
+def test_tenders_and_holidays_are_notices_not_jobs():
+    assert (
+        classify_notification(
+            "MSWC — E-tender notice for provision of cold storage facilities at Miraj at rental basis."
+        )
+        == NotificationType.NOTICE
+    )
+    assert classify_notification("Quotation for dedicated mail server") == NotificationType.NOTICE
+    assert (
+        classify_notification("District (Gondia) — गोंदिया जिल्ह्याच्या स्थानिक सुट्ट्या-२०२६")
+        == NotificationType.NOTICE
+    )
+    assert classify_notification("दरपत्रक सुचनापत्र कॅन्टीन") == NotificationType.NOTICE

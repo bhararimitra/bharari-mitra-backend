@@ -14,6 +14,18 @@ from app.modules.jobs.models import NotificationType
 # Ordered: first match wins (most specific first).
 _RULES: list[tuple[NotificationType, re.Pattern[str]]] = [
     (
+        NotificationType.NOTICE,
+        re.compile(
+            r"(?:"
+            r"\b(?:e[\s-]*tender|tender|quotation|rfp|auction|holiday\s*list|"
+            r"local\s*holiday|gazette)\b"
+            r"|निविदा|दरपत्रक|टेंडर|खरेदी|लिलाव"
+            r"|सुट्ट्या|सुट्टी\s*दिनदर्शिका|स्थानिक\s*सुट्ट"
+            r")",
+            re.I,
+        ),
+    ),
+    (
         NotificationType.HALL_TICKET,
         re.compile(
             r"(?:"
