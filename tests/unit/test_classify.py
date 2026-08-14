@@ -92,6 +92,12 @@ def test_plain_recruitment_defaults_to_job():
         classify_notification("महाराष्ट्र पोलीस शिपाई भरती २०२५ — अर्ज सुरु")
         == NotificationType.JOB
     )
+    assert (
+        classify_notification(
+            "017/2026 - Advt.No.017/2026 Maharashtra Group C Services Combine Preliminary Examination 2026"
+        )
+        == NotificationType.ADVERTISEMENT
+    )
 
 
 def test_english_hall_ticket_and_answer_key():
@@ -112,3 +118,11 @@ def test_tenders_and_holidays_are_notices_not_jobs():
         == NotificationType.NOTICE
     )
     assert classify_notification("दरपत्रक सुचनापत्र कॅन्टीन") == NotificationType.NOTICE
+    assert (
+        classify_notification("MSWC — Selected List of Empanelment of Advocates")
+        == NotificationType.NOTICE
+    )
+    assert (
+        classify_notification("District — Indian Election Commission voter awareness")
+        == NotificationType.NOTICE
+    )
